@@ -1,0 +1,7 @@
+
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="24" fill="#4285F4"/>
+  <path d="M35 30V38H75V30H35ZM45 42V50H85V42H45ZM25 54V62H65V54H25ZM55 66V74H95V66H55ZM30 78V86H70V78H30Z" fill="white" fill-opacity="0.2"/>
+  <text x="32" y="80" fill="white" font-family="Arial, sans-serif" font-weight="bold" font-size="64">G</text>
+  <text x="65" y="105" fill="#E8F0FE" font-family="Arial, sans-serif" font-weight="bold" font-size="54">文</text>
+</svg>

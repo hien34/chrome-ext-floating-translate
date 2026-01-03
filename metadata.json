@@ -1,0 +1,5 @@
+{
+  "name": "Floating Translate",
+  "description": "Chrome extension for floating Japanese-English translation using Gemini.",
+  "requestFramePermissions": []
+}
