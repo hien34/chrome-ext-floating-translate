@@ -63,16 +63,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
                 const payload = {
                     contents: [{ parts: [{ text: request.text }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    generationConfig: {
+                        maxOutputTokens: 1024,
+                        temperature: 0.3
+                    },
+                    // Disable thinking for faster responses
+                    thinkingConfig: {
+                        thinkingBudget: 0
+                    }
                 };
 
                 const url = `${API_BASE_URL}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
+                console.time('Gemini API Call');
                 const response = await fetchWithRetry(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+                console.timeEnd('Gemini API Call');
 
                 const result = await response.json();
                 const translatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
