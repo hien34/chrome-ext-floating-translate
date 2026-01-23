@@ -1,4 +1,4 @@
-const GEMINI_MODEL = "gemini-3-flash-preview";
+const GEMINI_MODEL = "gemini-2.0-flash";
 const API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 
 // Use exponential backoff for retries
@@ -41,16 +41,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             try {
                 const data = await chrome.storage.sync.get(['geminiApiKey']);
                 const apiKey = data.geminiApiKey;
-                
+
                 if (!apiKey) {
                     sendResponse({ status: 'error', message: 'Missing API Key. Please open settings.' });
                     return;
                 }
-    
+
                 const sourceLangText = request.sourceLang === 'ja' ? 'Japanese' : 'English';
                 const targetLangText = request.targetLang === 'en' ? 'English' : 'Japanese';
                 const direction = `${sourceLangText} to ${targetLangText}`;
-                
+
                 let systemPrompt = "";
                 if (request.action === 'translateTextKanji') {
                     systemPrompt = `You are a Japanese linguistic assistant. 
@@ -60,20 +60,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 } else {
                     systemPrompt = `You are a professional translator. Provide only the direct translation from ${direction}. No conversational filler.`;
                 }
-                
-                const payload = { 
+
+                const payload = {
                     contents: [{ parts: [{ text: request.text }] }],
                     systemInstruction: { parts: [{ text: systemPrompt }] }
                 };
-                
+
                 const url = `${API_BASE_URL}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-    
+
                 const response = await fetchWithRetry(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-    
+
                 const result = await response.json();
                 const translatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
 
