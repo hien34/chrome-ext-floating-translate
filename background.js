@@ -1,4 +1,4 @@
-const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL = "gemini-3-flash-preview";
 const API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 
 // Use exponential backoff for retries
@@ -72,13 +72,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
                 const url = `${API_BASE_URL}/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
-                console.time('Gemini API Call');
                 const response = await fetchWithRetry(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                console.timeEnd('Gemini API Call');
 
                 const result = await response.json();
                 const translatedText = result.candidates?.[0]?.content?.parts?.[0]?.text;
