@@ -67,10 +67,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     generationConfig: {
                         maxOutputTokens: 1024,
                         temperature: 0.3
-                    },
-                    // Disable thinking for faster responses
-                    thinkingConfig: {
-                        thinkingBudget: 0
                     }
                 };
 
