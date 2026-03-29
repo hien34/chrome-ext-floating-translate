@@ -249,33 +249,39 @@
     const triggerTranslate = (mode) => {
         const text = inputEl.value.trim();
         if(!text) return;
-        
-        outputEl.value = 'Translating...';
+
+        outputEl.value = '';
         transBtn.disabled = true;
         kanjiBtn.disabled = true;
 
         try {
-            chrome.runtime.sendMessage({
-                action: mode === 'kanji' ? 'translateTextKanji' : 'translateText',
-                text, sourceLang, targetLang
-            }, (res) => {
-                if (chrome.runtime.lastError) {
-                    outputEl.value = 'Error: ' + (chrome.runtime.lastError.message || 'Unknown error');
-                    transBtn.disabled = false;
-                    kanjiBtn.disabled = false;
-                    return;
-                }
-                
-                if (!res) {
-                    outputEl.value = 'Error: No response from extension.';
-                    transBtn.disabled = false;
-                    kanjiBtn.disabled = false;
-                    return;
-                }
+            const port = chrome.runtime.connect({ name: 'translate-stream' });
+            let fullText = '';
 
-                outputEl.value = res.status === 'success' ? res.translatedText : (res.message || 'Error');
+            port.onMessage.addListener((msg) => {
+                if (msg.type === 'chunk') {
+                    fullText += msg.text;
+                    outputEl.value = fullText;
+                } else if (msg.type === 'done') {
+                    transBtn.disabled = false;
+                    kanjiBtn.disabled = false;
+                    port.disconnect();
+                } else if (msg.type === 'error') {
+                    outputEl.value = 'Error: ' + msg.message;
+                    transBtn.disabled = false;
+                    kanjiBtn.disabled = false;
+                    port.disconnect();
+                }
+            });
+
+            port.onDisconnect.addListener(() => {
                 transBtn.disabled = false;
                 kanjiBtn.disabled = false;
+            });
+
+            port.postMessage({
+                action: mode === 'kanji' ? 'translateTextKanji' : 'translateText',
+                text, sourceLang, targetLang
             });
         } catch (e) {
             console.error(e);
