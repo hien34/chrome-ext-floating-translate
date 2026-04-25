@@ -96,7 +96,7 @@
             font-size: 11px; font-weight: 700;
         }
         textarea.ft-textarea {
-            width: 100%; padding: 12px; border-radius: 8px;
+            width: 100%; padding: 12px 12px 36px 12px; border-radius: 8px;
             border: 1px solid var(--ft-border); background: var(--ft-input-bg);
             color: var(--ft-text); font-size: 14px; resize: none; outline: none;
         }
@@ -162,7 +162,7 @@
 
             <div style="position:relative; flex:1; display:flex;">
                 <textarea id="ft-input" class="ft-textarea" style="height:100%;" placeholder="Type and press Enter..."></textarea>
-                <button id="ft-clear-btn" title="Clear All" class="ft-action-sm-btn" style="top:8px; bottom:auto; right:8px; padding:4px;">
+                <button id="ft-clear-btn" title="Clear All" class="ft-action-sm-btn" style="padding:4px;">
                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
