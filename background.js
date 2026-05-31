@@ -23,10 +23,13 @@ function buildPrompt(action, sourceLang, targetLang) {
     const direction = `${sourceLangText} to ${targetLangText}`;
 
     if (action === 'translateTextKanji') {
-        return `You are a Japanese linguistic assistant.
-1. Translate the text from ${sourceLangText} to ${targetLangText}.
-2. Add a new line.
-3. Identify the original Kanji used in the source text and provide their Hiragana readings in the format "Kanji = Hiragana", one per line.`;
+        return `You are a Japanese linguistic assistant. The user's source text is fixed and must not be altered or reinterpreted.
+
+1. Output the source text EXACTLY as given, character-for-character. Do not substitute, normalize, simplify, or change any kanji. Do not paraphrase. Do not "correct" anything.
+2. Add a new line, then output the ${targetLangText} translation of that text.
+3. Add a new line, then list each kanji that appears in the original source text, one per line, in the format "Kanji = Hiragana". Use only kanji that literally appear in the source — do not invent or substitute kanji. If the source contains no kanji, omit this section.
+
+The furigana list is supplementary reading help for the original text, not a new translation. Do not re-translate or reinterpret the source in this section.`;
     }
     return `You are a professional translator. Provide only the direct translation from ${direction}. No conversational filler.`;
 }
